@@ -21,13 +21,14 @@ export default function Home() {
     setMessages(updatedMessages);
     setLoading(true);
 
-    const response = await fetch("/api/chat", {
+    const response = await fetch("https://a6f0-2400-adc5-168-fc00-318c-6612-4e5a-d372.ngrok-free.app/whatsapp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        messages: updatedMessages
+        msg: message.content,
+        from:"Faisal"
       })
     });
 
@@ -44,43 +45,54 @@ export default function Home() {
 
     setLoading(false);
 
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-    let isFirst = true;
+    const data2 =await response.json()
+    console.log(data2.response)
 
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-
-      if (isFirst) {
-        isFirst = false;
-        setMessages((messages) => [
-          ...messages,
-          {
-            role: "assistant",
-            content: chunkValue
-          }
-        ]);
-      } else {
-        setMessages((messages) => {
-          const lastMessage = messages[messages.length - 1];
-          const updatedMessage = {
-            ...lastMessage,
-            content: lastMessage.content + chunkValue
-          };
-          return [...messages.slice(0, -1), updatedMessage];
-        });
+    setMessages((messages) => [
+      ...messages,
+      {
+        role: "assistant",
+        content: data2.response
       }
-    }
+    ]);
+
+    // const reader = data.getReader();
+    // const decoder = new TextDecoder();
+    // let done = false;
+    // let isFirst = true;
+
+    // while (!done) {
+    //   const { value, done: doneReading } = await reader.read();
+    //   done = doneReading;
+    //   const chunkValue = decoder.decode(value);
+
+    //   if (isFirst) {
+    //     isFirst = false;
+    //     setMessages((messages) => [
+    //       ...messages,
+    //       {
+    //         role: "assistant",
+    //         content: chunkValue
+    //       }
+    //     ]);
+    //   } else {
+    //     setMessages((messages) => {
+    //       const lastMessage = messages[messages.length - 1];
+    //       const updatedMessage = {
+    //         ...lastMessage,
+    //         content: lastMessage.content + chunkValue
+    //       };
+    //       return [...messages.slice(0, -1), updatedMessage];
+    //     });
+    //   }
+    // }
   };
 
   const handleReset = () => {
     setMessages([
       {
         role: "assistant",
-        content: `Hi there! I'm Chatbot UI, an AI assistant. I can help you with things like answering questions, providing information, and helping with tasks. How can I help you?`
+        content: `Hi there! 👋 I'm June 🔥, an AI assistant. You can store your information by prefixing your message with train: and then your statement, or you can ask me questions you like.`
       }
     ]);
   };
@@ -93,7 +105,7 @@ export default function Home() {
     setMessages([
       {
         role: "assistant",
-        content: `Hi there! I'm Chatbot UI, an AI assistant. I can help you with things like answering questions, providing information, and helping with tasks. How can I help you?`
+        content: `Hi there! I'm June, an AI assistant. You can store your information by prefixing your message with train: and then your statement, or you can ask me questions you like.`
       }
     ]);
   }, []);
@@ -101,7 +113,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Chatbot UI</title>
+        <title>Hi , June here 🫡</title>
         <meta
           name="description"
           content="A simple chatbot starter kit for OpenAI's chat model using Next.js, TypeScript, and Tailwind CSS."
